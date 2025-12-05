@@ -57,12 +57,18 @@ server <- function(input, output, session) {
   
   rv$df_select <- diamonds %>% filter(price <= input$prix & color == input$choixCouleur) %>% select(-x, -y, -z)
   
+  rv$radioRose <- input$radio
+  
   })
   
   output$DiamondPlot <- renderPlotly({
+    radioCouleurGraph <- ifelse(rv$radioRose == 1, "pink", "black")
     mygraph <- ggplot(data = diamonds) +
       aes(x =carat , y = price) +
-      geom_point()
+      geom_point(color = radioCouleurGraph) +
+      labs(
+        title = paste("prix :", input$prix, "couleur:", input$choixCouleur)
+      )
     
     ggplotly(mygraph)
     
