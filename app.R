@@ -37,14 +37,15 @@ ui <- fluidPage(
         ),
 
         mainPanel(
-          plotlyOutput("plot")
+          plotlyOutput(outputId = "DiamondPlot"),
+          DTOutput(outputId = "DiamondTableau")
         )
     )
 )
 
 server <- function(input, output, session) {
   
-  output$plot <- renderPlotly({
+  output$DiamondPlot <- renderPlotly({
     mygraph <- ggplot(data = diamonds) +
       aes(x =carat , y = price) +
       geom_point()
@@ -57,7 +58,13 @@ server <- function(input, output, session) {
       paste("prix :", input$prix, "couluer:", input$choixCouleur),
       type = "message"
     )
-  } )
+  })
+  
+  output$DiamondTableau <- renderDT({
+    diamonds %>% filter(price == input$prix)
+  })
+  
+  
 }
 
 
