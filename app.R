@@ -1,51 +1,58 @@
-#
-# This is a Shiny web application. You can run the application by clicking
-# the 'Run App' button above.
-#
-# Find out more about building applications with Shiny here:
-#
-#    https://shiny.posit.co/
-#
-
 library(shiny)
+library(dplyr)
+library(ggplot2)
+library(DT)
+library(bslib)
+library(thematic)
+library(plotly)
 
-# Define UI for application that draws a histogram
 ui <- fluidPage(
-
-    # Application title
-    titlePanel("Old Faithful Geyser Data"),
-
-    # Sidebar with a slider input for number of bins 
+  theme = bs_theme(
+    version = 5,
+    bootswatch = "minty"
+  ),
+    titlePanel("Exploration des diamonds"),
+    
     sidebarLayout(
         sidebarPanel(
-            sliderInput("bins",
-                        "Number of bins:",
-                        min = 1,
-                        max = 50,
-                        value = 30)
+          
+          radioButtons(inputId = "radio", 
+                       label = "Colorié les points en rose ?",
+                       choices = list("Oui"=1, "Non"=2),
+                       selected = 1),
+          
+            sliderInput(inputId = "prix",
+                        label = "Prix maximum",
+                        min = 300,
+                        max = 20000,
+                        value = 5000),
+          
+          selectInput(inputId = "choixCouleur",
+                      label = "Choisir une couleur à filtré",
+                      choices = c("D", "E", "F", "G", "H", "I", "J")),
+          
+          actionButton(inputId = "boutton",
+                       label = "Visualiser le graph"
+          )
         ),
 
-        # Show a plot of the generated distribution
         mainPanel(
-           plotOutput("distPlot")
+          plotlyOutput("plot")
         )
     )
 )
 
-# Define server logic required to draw a histogram
-server <- function(input, output) {
-
-    output$distPlot <- renderPlot({
-        # generate bins based on input$bins from ui.R
-        x    <- faithful[, 2]
-        bins <- seq(min(x), max(x), length.out = input$bins + 1)
-
-        # draw the histogram with the specified number of bins
-        hist(x, breaks = bins, col = 'darkgray', border = 'white',
-             xlab = 'Waiting time to next eruption (in mins)',
-             main = 'Histogram of waiting times')
+server <- function(input, output, session) {
+  
+  output$plot <- plotly::renderPlotly({
+    mygraph <- ggplot(data = diamonds) +
+      aes(x =carat , y = price) +
+      geom_point()
+    
+    plotly::ggplotly(mygraph)
+    
     })
 }
 
-# Run the application 
+
 shinyApp(ui = ui, server = server)
