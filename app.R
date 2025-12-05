@@ -84,3 +84,5 @@ server <- function(input, output, session) {
 
 
 shinyApp(ui = ui, server = server)
+
+#Au lancement du code, l'application affiche le message d'erreur : "object 'carat' not found". Il disparait quand on clique sur le bouton.
