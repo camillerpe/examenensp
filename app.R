@@ -45,6 +45,17 @@ ui <- fluidPage(
 
 server <- function(input, output, session) {
   
+  rv <- reactiveValues(df = diamonds)
+
+  observeEvent(input$boutton,{
+    showNotification(
+      paste("prix :", input$prix, "couleur:", input$choixCouleur),
+      type = "default"
+    )
+  
+  rv$df_filter <- diamonds %>% filter(price <= input$prix & color == input$choixCouleur)
+  })
+  
   output$DiamondPlot <- renderPlotly({
     mygraph <- ggplot(data = diamonds) +
       aes(x =carat , y = price) +
@@ -53,15 +64,9 @@ server <- function(input, output, session) {
     ggplotly(mygraph)
     
     })
-  observeEvent(input$boutton,{
-    showNotification(
-      paste("prix :", input$prix, "couluer:", input$choixCouleur),
-      type = "message"
-    )
-  })
   
   output$DiamondTableau <- renderDT({
-    diamonds %>% filter(price == input$prix)
+    rv$df_filter %>% select(-x, -y, -z)
   })
   
   
