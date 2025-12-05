@@ -54,6 +54,9 @@ server <- function(input, output, session) {
     )
   
   rv$df_filter <- diamonds %>% filter(price <= input$prix & color == input$choixCouleur)
+  
+  rv$df_select <- diamonds %>% filter(price <= input$prix & color == input$choixCouleur) %>% select(-x, -y, -z)
+  
   })
   
   output$DiamondPlot <- renderPlotly({
@@ -66,7 +69,7 @@ server <- function(input, output, session) {
     })
   
   output$DiamondTableau <- renderDT({
-    rv$df_filter %>% select(-x, -y, -z)
+    rv$df_select
   })
   
   
