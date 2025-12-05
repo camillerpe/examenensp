@@ -44,14 +44,20 @@ ui <- fluidPage(
 
 server <- function(input, output, session) {
   
-  output$plot <- plotly::renderPlotly({
+  output$plot <- renderPlotly({
     mygraph <- ggplot(data = diamonds) +
       aes(x =carat , y = price) +
       geom_point()
     
-    plotly::ggplotly(mygraph)
+    ggplotly(mygraph)
     
     })
+  observeEvent(input$boutton,{
+    showNotification(
+      paste("prix :", input$prix, "couluer:", input$choixCouleur),
+      type = "message"
+    )
+  } )
 }
 
 
