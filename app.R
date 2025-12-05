@@ -21,15 +21,15 @@ ui <- fluidPage(
                        choices = list("Oui"=1, "Non"=2),
                        selected = 1),
           
+          selectInput(inputId = "choixCouleur",
+                      label = "Choisir une couleur à filtré",
+                      choices = c("D", "E", "F", "G", "H", "I", "J")),
+          
             sliderInput(inputId = "prix",
                         label = "Prix maximum",
                         min = 300,
                         max = 20000,
                         value = 5000),
-          
-          selectInput(inputId = "choixCouleur",
-                      label = "Choisir une couleur à filtré",
-                      choices = c("D", "E", "F", "G", "H", "I", "J")),
           
           actionButton(inputId = "boutton",
                        label = "Visualiser le graph"
