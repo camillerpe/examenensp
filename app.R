@@ -49,7 +49,7 @@ server <- function(input, output, session) {
 
   observeEvent(input$boutton,{
     showNotification(
-      paste("prix :", input$prix, "couleur:", input$choixCouleur),
+      paste("prix :", input$prix, "& color :", input$choixCouleur),
       type = "default"
     )
   
@@ -68,7 +68,7 @@ server <- function(input, output, session) {
       aes(x =carat , y = price) +
       geom_point(color = radioCouleurGraph) +
       labs(
-        title = paste("prix :", input$prix, "couleur:", input$choixCouleur)
+        title = paste("prix :", input$prix, "& color :", input$choixCouleur)
       )
     
     ggplotly(mygraph)
